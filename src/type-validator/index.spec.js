@@ -28,6 +28,21 @@ describe('Test type validation logic', () => {
     expect(actual.validFields).to.deep.equal({ [nameFieldName]: nameResult, [ageFieldName]: ageResult });
   });
 
+  it('should return invalid type when name field is invalid', () => {
+    const name = '';
+    const nameResult = Field.validate(name, nameFieldName).ap(notEmptyRule);
+
+    const age = 18;
+    const ageResult = Field.validate(age, ageFieldName).ap(eighteenAndGreaterRule);
+
+    const actual = Type.validate(userType).ap(nameResult).ap(ageResult);
+
+    expect(actual.valid).to.equal(false);
+    expect(actual.value).to.deep.equal({ name: name, age: age });
+    expect(actual.validFields).to.deep.equal({ [ageFieldName]: ageResult });
+    expect(actual.invalidFields).to.deep.equal({ [nameFieldName]: nameResult });
+  });
+
   it('should return invalid type when age field is invalid', () => {
     const name = 'Matt';
     const nameResult = Field.validate(name, nameFieldName).ap(notEmptyRule);
