@@ -2,38 +2,42 @@ export default class Type {
   static validate = curriedType => ValidType(curriedType, {});
 }
 
-const ValidType = (value, validFields) => {
-  const map = (curriedType, fieldValue, validFields) => ValidType(curriedType(fieldValue), validFields);
+const ValidType = (value, fieldResults) => {
+  const map = (curriedType, fieldValue, fieldResults) => ValidType(curriedType(fieldValue), fieldResults);
   return {
     value,
-    validFields,
+    fieldResults,
     valid: true,
     map,
     ap: fieldResult => {
       if (fieldResult.valid) {
-        return map(value, fieldResult.value, { ...validFields, [fieldResult.name]: fieldResult });
+        return map(value, fieldResult.value, { ...fieldResults, [fieldResult.name]: fieldResult });
       } else {
-        return InvalidType(value(fieldResult.value), validFields, { [fieldResult.name]: fieldResult });
+        return InvalidType(value(fieldResult.value), { ...fieldResults, [fieldResult.name]: fieldResult });
       }
     },
+    validFields: () => filterFieldResults(validPredicate, fieldResults),
+    invalidFields: () => filterFieldResults(invalidPredicate, fieldResults),
   }
 }
 
-const InvalidType = (value, validFields, invalidFields) => {
-  const map = (curriedType, fieldValue, validFields, invalidFields) =>
-    InvalidType(curriedType(fieldValue), validFields, invalidFields);
+const InvalidType = (value, fieldResults) => {
   return {
     value,
-    validFields,
-    invalidFields,
+    fieldResults,
     valid: false,
-    map,
-    ap: fieldResult => {
-      if (fieldResult.valid) {
-        return map(value, fieldResult.value, { ...validFields, [fieldResult.name]: fieldResult }, invalidFields);
-      } else {
-        return map(value, fieldResult.value, validFields, { ...invalidFields, [fieldResult.name]: fieldResult });
-      }
-    }
+    ap: fieldResult => InvalidType(value(fieldResult.value), { ...fieldResults, [fieldResult.name]: fieldResult }),
+    validFields: () => filterFieldResults(validPredicate, fieldResults),
+    invalidFields: () => filterFieldResults(invalidPredicate, fieldResults),
   }
 }
+
+const validPredicate = result => result.valid;
+
+const invalidPredicate = result => !result.valid;
+
+const filterFieldResults = (predicate, results) =>
+  Object.values(results)
+    .filter(predicate)
+    .map(result => { return { [result.name]: result }; })
+    .reduce((fields, next) => Object.assign({}, fields, next), {});

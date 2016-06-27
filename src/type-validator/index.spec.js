@@ -25,7 +25,8 @@ describe('Test type validation logic', () => {
 
     expect(actual.valid).to.equal(true);
     expect(actual.value).to.deep.equal({ name: name, age: age });
-    expect(actual.validFields).to.deep.equal({ [nameFieldName]: nameResult, [ageFieldName]: ageResult });
+    expect(actual.fieldResults).to.deep.equal({ [nameFieldName]: nameResult, [ageFieldName]: ageResult });
+    expect(actual.validFields()).to.deep.equal({ [nameFieldName]: nameResult, [ageFieldName]: ageResult });
   });
 
   it('should return invalid type when name field is invalid', () => {
@@ -39,8 +40,9 @@ describe('Test type validation logic', () => {
 
     expect(actual.valid).to.equal(false);
     expect(actual.value).to.deep.equal({ name: name, age: age });
-    expect(actual.validFields).to.deep.equal({ [ageFieldName]: ageResult });
-    expect(actual.invalidFields).to.deep.equal({ [nameFieldName]: nameResult });
+    expect(actual.fieldResults).to.deep.equal({ [nameFieldName]: nameResult, [ageFieldName]: ageResult });
+    expect(actual.validFields()).to.deep.equal({ [ageFieldName]: ageResult });
+    expect(actual.invalidFields()).to.deep.equal({ [nameFieldName]: nameResult });
   });
 
   it('should return invalid type when age field is invalid', () => {
@@ -54,8 +56,9 @@ describe('Test type validation logic', () => {
 
     expect(actual.valid).to.equal(false);
     expect(actual.value).to.deep.equal({ name: name, age: age });
-    expect(actual.validFields).to.deep.equal({ [nameFieldName]: nameResult });
-    expect(actual.invalidFields).to.deep.equal({ [ageFieldName]: ageResult });
+    expect(actual.fieldResults).to.deep.equal({ [nameFieldName]: nameResult, [ageFieldName]: ageResult });
+    expect(actual.validFields()).to.deep.equal({ [nameFieldName]: nameResult });
+    expect(actual.invalidFields()).to.deep.equal({ [ageFieldName]: ageResult });
   });
 
   it('should return invalid type when all fields are invalid', () => {
@@ -69,7 +72,8 @@ describe('Test type validation logic', () => {
 
     expect(actual.valid).to.equal(false);
     expect(actual.value).to.deep.equal({ name: name, age: age });
-    expect(actual.validFields).to.deep.equal({});
-    expect(actual.invalidFields).to.deep.equal({ [ageFieldName]: ageResult, [nameFieldName]: nameResult });
+    expect(actual.fieldResults).to.deep.equal({ [nameFieldName]: nameResult, [ageFieldName]: ageResult });
+    expect(actual.validFields()).to.deep.equal({});
+    expect(actual.invalidFields()).to.deep.equal({ [ageFieldName]: ageResult, [nameFieldName]: nameResult });
   });
 });
