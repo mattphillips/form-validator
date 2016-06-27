@@ -1,26 +1,26 @@
 export default class Field {
-  static validate = value => value.valid === undefined ? ValidField(value) : value;
+  static validate = (value, name) => value.valid === undefined ? ValidField(value, name) : value;
 }
 
-export const ValidField = value => {
+export const ValidField = (value, name) => {
   return {
     value,
+    name,
     valid: true,
-    ap: rule => {
-      return rule(value);
-    }
+    ap: rule => rule(value, name),
   };
 };
 
-export const InvalidField = (value, errors) => {
+export const InvalidField = (value, name, errors) => {
   return {
     value,
+    name,
     errors,
     valid: false,
     ap: rule => {
-      const result = rule(value);
-      if (result.valid) return InvalidField(value, errors);
-      return InvalidField(value, [].concat(errors, result.errors));
+      const result = rule(value, name);
+      if (result.valid) return InvalidField(value, name, errors);
+      return InvalidField(value, name, [].concat(errors, result.errors));
     },
   };
 };

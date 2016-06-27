@@ -6,14 +6,16 @@ describe('Test rule logic', () => {
 
   it('should return valid object when predicate is true', () => {
     const value = 'Hello, world!';
-    expect(notEmptyRule(value).valid).to.equal(true);
-    expect(notEmptyRule(value).value).to.equal(value);
+    const actual = notEmptyRule(value);
+    expect(actual.valid).to.equal(true);
+    expect(actual.value).to.equal(value);
   });
 
   it('should return invalid object when predicate is false', () => {
     const value = '';
-    expect(notEmptyRule(value).valid).to.equal(false);
-    expect(notEmptyRule(value).value).to.equal(value);
-    expect(notEmptyRule(value).errors).to.deep.equal(['Error field should not be empty']);
+    const actual = notEmptyRule(value);
+    expect(actual.valid).to.equal(false);
+    expect(actual.value).to.equal(value);
+    expect(actual.errors).to.deep.equal(['Error field should not be empty']);
   });
 });
