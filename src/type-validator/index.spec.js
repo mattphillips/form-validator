@@ -25,7 +25,7 @@ describe('Test type validation logic', () => {
 
     expect(actual.valid).to.equal(true);
     expect(actual.value).to.deep.equal({ name: name, age: age });
-    expect(actual.validFields).to.deep.equal([nameResult, ageResult]);
+    expect(actual.validFields).to.deep.equal({ [nameFieldName]: nameResult, [ageFieldName]: ageResult });
   });
 
   it('should return invalid type when age field is invalid', () => {
@@ -39,7 +39,7 @@ describe('Test type validation logic', () => {
 
     expect(actual.valid).to.equal(false);
     expect(actual.value).to.deep.equal({ name: name, age: age });
-    expect(actual.validFields).to.deep.equal([nameResult]);
+    expect(actual.validFields).to.deep.equal({ [nameFieldName]: nameResult });
     expect(actual.invalidFields).to.deep.equal({ [ageFieldName]: ageResult });
   });
 
@@ -54,7 +54,7 @@ describe('Test type validation logic', () => {
 
     expect(actual.valid).to.equal(false);
     expect(actual.value).to.deep.equal({ name: name, age: age });
-    expect(actual.validFields).to.deep.equal([]);
+    expect(actual.validFields).to.deep.equal({});
     expect(actual.invalidFields).to.deep.equal({ [ageFieldName]: ageResult, [nameFieldName]: nameResult });
   });
 });

@@ -1,8 +1,7 @@
 export default class Type {
-  static validate = curriedType => curriedType.valid === undefined ? ValidType(curriedType, []) : curriedType;
+  static validate = curriedType => curriedType.valid === undefined ? ValidType(curriedType, {}) : curriedType;
 }
 
-// TODO: maybe invalidFields should be an object of field name -> invalidField instead of [invalidField]
 const ValidType = (value, validFields) => {
   const map = (curriedType, fieldValue, validFields) => ValidType(curriedType(fieldValue), validFields);
   return {
@@ -12,7 +11,7 @@ const ValidType = (value, validFields) => {
     map,
     ap: fieldResult => {
       if (fieldResult.valid) {
-        return map(value, fieldResult.value, validFields.concat(fieldResult));
+        return map(value, fieldResult.value, { ...validFields, [fieldResult.name]: fieldResult });
       } else {
         return InvalidType(value(fieldResult.value), validFields, { [fieldResult.name]: fieldResult });
       }
@@ -31,7 +30,7 @@ const InvalidType = (value, validFields, invalidFields) => {
     map,
     ap: fieldResult => {
       if (fieldResult.valid) {
-        return map(value, fieldResult.value, validFields, invalidFields);
+        return map(value, fieldResult.value, { ...validFields, [fieldResult.name]: fieldResult }, invalidFields);
       } else {
         return map(value, fieldResult.value, validFields, { ...invalidFields, [fieldResult.name]: fieldResult });
       }
