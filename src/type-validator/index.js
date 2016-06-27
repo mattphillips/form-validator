@@ -14,7 +14,7 @@ const ValidType = (value, validFields) => {
       if (fieldResult.valid) {
         return map(value, fieldResult.value, validFields.concat(fieldResult));
       } else {
-        return InvalidType(value(fieldResult.value), validFields, [fieldResult]);
+        return InvalidType(value(fieldResult.value), validFields, { [fieldResult.name]: fieldResult });
       }
     },
   }
@@ -33,7 +33,7 @@ const InvalidType = (value, validFields, invalidFields) => {
       if (fieldResult.valid) {
         return map(value, fieldResult.value, validFields, invalidFields);
       } else {
-        return map(value, fieldResult.value, validFields, invalidFields.concat(fieldResult));
+        return map(value, fieldResult.value, validFields, { ...invalidFields, [fieldResult.name]: fieldResult });
       }
     }
   }
