@@ -1,8 +1,8 @@
 export default class Field {
-  static validate = value => value.valid === undefined ? valid(value) : value;
+  static validate = value => value.valid === undefined ? ValidField(value) : value;
 }
 
-export const valid = value => {
+export const ValidField = value => {
   return {
     value,
     valid: true,
@@ -12,15 +12,15 @@ export const valid = value => {
   };
 };
 
-export const invalid = (value, errors) => {
+export const InvalidField = (value, errors) => {
   return {
     value,
     errors,
     valid: false,
     ap: rule => {
       const result = rule(value);
-      if (result.valid) return invalid(value, errors);
-      return invalid(value, [].concat(errors, result.errors));
+      if (result.valid) return InvalidField(value, errors);
+      return InvalidField(value, [].concat(errors, result.errors));
     },
   };
 };
