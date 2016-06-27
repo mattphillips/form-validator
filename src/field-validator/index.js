@@ -1,5 +1,5 @@
 export default class Field {
-  static validate = (value, name) => value.valid === undefined ? ValidField(value, name) : value;
+  static validate = (value, name) => ValidField(value, name);
 }
 
 export const ValidField = (value, name) => {

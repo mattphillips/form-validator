@@ -1,5 +1,5 @@
 export default class Type {
-  static validate = curriedType => curriedType.valid === undefined ? ValidType(curriedType, {}) : curriedType;
+  static validate = curriedType => ValidType(curriedType, {});
 }
 
 const ValidType = (value, validFields) => {
