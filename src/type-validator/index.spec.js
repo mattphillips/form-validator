@@ -16,10 +16,10 @@ describe('Test type validation logic', () => {
 
   it('should return valid type when all fields are valid', () => {
     const name = 'Matt';
-    const nameResult = Field.validate(name, nameFieldName).ap(notEmptyRule);
+    const nameResult = Field.validate(name, nameFieldName).bind(notEmptyRule);
 
     const age = 18;
-    const ageResult = Field.validate(age, ageFieldName).ap(eighteenAndGreaterRule);
+    const ageResult = Field.validate(age, ageFieldName).bind(eighteenAndGreaterRule);
 
     const actual = Type.validate(userType).ap(nameResult).ap(ageResult);
 
@@ -31,10 +31,10 @@ describe('Test type validation logic', () => {
 
   it('should return invalid type when name field is invalid', () => {
     const name = '';
-    const nameResult = Field.validate(name, nameFieldName).ap(notEmptyRule);
+    const nameResult = Field.validate(name, nameFieldName).bind(notEmptyRule);
 
     const age = 18;
-    const ageResult = Field.validate(age, ageFieldName).ap(eighteenAndGreaterRule);
+    const ageResult = Field.validate(age, ageFieldName).bind(eighteenAndGreaterRule);
 
     const actual = Type.validate(userType).ap(nameResult).ap(ageResult);
 
@@ -47,10 +47,10 @@ describe('Test type validation logic', () => {
 
   it('should return invalid type when age field is invalid', () => {
     const name = 'Matt';
-    const nameResult = Field.validate(name, nameFieldName).ap(notEmptyRule);
+    const nameResult = Field.validate(name, nameFieldName).bind(notEmptyRule);
 
     const age = 17;
-    const ageResult = Field.validate(age, ageFieldName).ap(eighteenAndGreaterRule);
+    const ageResult = Field.validate(age, ageFieldName).bind(eighteenAndGreaterRule);
 
     const actual = Type.validate(userType).ap(nameResult).ap(ageResult);
 
@@ -63,10 +63,10 @@ describe('Test type validation logic', () => {
 
   it('should return invalid type when all fields are invalid', () => {
     const name = '';
-    const nameResult = Field.validate(name, nameFieldName).ap(notEmptyRule);
+    const nameResult = Field.validate(name, nameFieldName).bind(notEmptyRule);
 
     const age = 17;
-    const ageResult = Field.validate(age, ageFieldName).ap(eighteenAndGreaterRule);
+    const ageResult = Field.validate(age, ageFieldName).bind(eighteenAndGreaterRule);
 
     const actual = Type.validate(userType).ap(nameResult).ap(ageResult);
 

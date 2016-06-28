@@ -7,7 +7,7 @@ export const ValidField = (value, name) => {
     value,
     name,
     valid: true,
-    ap: rule => rule(value, name),
+    bind: rule => rule(value, name),
   };
 };
 
@@ -17,7 +17,7 @@ export const InvalidField = (value, name, errors) => {
     name,
     errors,
     valid: false,
-    ap: rule => {
+    bind: rule => {
       const result = rule(value, name);
       if (result.valid) return InvalidField(value, name, errors);
       return InvalidField(value, name, [].concat(errors, result.errors));

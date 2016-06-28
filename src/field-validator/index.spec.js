@@ -20,7 +20,7 @@ describe('Test field result logic', () => {
 
   it('should return valid object when value passes one rule', () => {
     const value = 'Hello, World!';
-    const actual = Field.validate(value, fieldName).ap(notEmptyRule);
+    const actual = Field.validate(value, fieldName).bind(notEmptyRule);
 
     expect(actual.valid).to.equal(true);
     expect(actual.value).to.equal(value);
@@ -29,7 +29,7 @@ describe('Test field result logic', () => {
 
   it('should return valid object when value passes multiple rules', () => {
     const value = 'Hello!';
-    const actual = Field.validate(value, fieldName).ap(notEmptyRule).ap(maxLengthRule);
+    const actual = Field.validate(value, fieldName).bind(notEmptyRule).bind(maxLengthRule);
 
     expect(actual.valid).to.equal(true);
     expect(actual.value).to.equal(value);
@@ -38,7 +38,7 @@ describe('Test field result logic', () => {
 
   it('should return invalid object when value fails one rule', () => {
     const value = '';
-    const actual = Field.validate(value, fieldName).ap(notEmptyRule);
+    const actual = Field.validate(value, fieldName).bind(notEmptyRule);
 
     expect(actual.valid).to.equal(false);
     expect(actual.value).to.equal(value);
@@ -48,7 +48,7 @@ describe('Test field result logic', () => {
 
   it('should return invalid object when value fails multiple rules', () => {
     const value = 'HELLO, WORLD!';
-    const actual = Field.validate(value, fieldName).ap(maxLengthRule).ap(lowerCaseRule);
+    const actual = Field.validate(value, fieldName).bind(maxLengthRule).bind(lowerCaseRule);
 
     expect(actual.valid).to.equal(false);
     expect(actual.value).to.equal(value);
@@ -58,7 +58,7 @@ describe('Test field result logic', () => {
 
   it('should return invalid object when value passes a rule and fails another rule', () => {
     const value = 'HELLO, WORLD!';
-    const actual = Field.validate(value, fieldName).ap(notEmptyRule).ap(lowerCaseRule);
+    const actual = Field.validate(value, fieldName).bind(notEmptyRule).bind(lowerCaseRule);
 
     expect(actual.valid).to.equal(false);
     expect(actual.value).to.equal(value);
@@ -68,7 +68,7 @@ describe('Test field result logic', () => {
 
   it('should return invalid object when value passes multiple rules and fails multiple rules', () => {
     const value = 'HELLO, WORLD!123';
-    const actual = Field.validate(value, fieldName).ap(notEmptyRule).ap(maxLengthRule).ap(lowerCaseRule).ap(numberRule);
+    const actual = Field.validate(value, fieldName).bind(notEmptyRule).bind(maxLengthRule).bind(lowerCaseRule).bind(numberRule);
 
     expect(actual.valid).to.equal(false);
     expect(actual.value).to.equal(value);
